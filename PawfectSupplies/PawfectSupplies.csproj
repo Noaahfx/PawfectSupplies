@@ -88,11 +88,14 @@
     <Content Include="Pages\User\AccountDetails.aspx" />
     <Content Include="Pages\User\Home.aspx" />
     <Content Include="Pages\User\Login.aspx" />
+    <Content Include="Pages\User\Logout.aspx" />
     <Content Include="Pages\User\Products.aspx" />
+    <Content Include="Pages\User\ShoppingCart.aspx" />
     <Content Include="Pages\User\Signup.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\CartDAL.cs" />
     <Compile Include="MasterPages\AdminMaster.master.cs">
       <DependentUpon>AdminMaster.master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -138,12 +141,26 @@
     <Compile Include="Pages\User\Login.aspx.designer.cs">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Pages\User\Logout.aspx.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\User\Logout.aspx.designer.cs">
+      <DependentUpon>Logout.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pages\User\Products.aspx.cs">
       <DependentUpon>Products.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Pages\User\Products.aspx.designer.cs">
       <DependentUpon>Products.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\User\ShoppingCart.aspx.cs">
+      <DependentUpon>ShoppingCart.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Pages\User\ShoppingCart.aspx.designer.cs">
+      <DependentUpon>ShoppingCart.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pages\User\Signup.aspx.cs">
       <DependentUpon>Signup.aspx</DependentUpon>

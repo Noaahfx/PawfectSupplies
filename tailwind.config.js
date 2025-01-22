@@ -7,6 +7,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['DM Sans', 'sans-serif'], // Add DM Sans as the default sans-serif font
+      },
       animation: {
         'fade-in': 'fadeIn 1.5s ease-in-out',
       },
@@ -29,6 +32,15 @@ module.exports = {
           800: '#115e59',
           900: '#134e4a',
         },
+      },
+      boxShadow: {
+        'navbar': '0 4px 6px rgba(0, 0, 0, 0.1)', // Custom shadow for navbar
+      },
+      transitionProperty: {
+        'navbar': 'background-color, box-shadow', // Control transitions for navbar
+      },
+      zIndex: {
+        'navbar': '50', // Ensure navbar stays above other elements
       },
     },
   },

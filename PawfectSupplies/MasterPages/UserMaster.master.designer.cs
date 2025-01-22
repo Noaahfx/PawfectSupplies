@@ -24,6 +24,24 @@ namespace PawfectSupplies.MasterPages
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
+        /// phCart control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phCart;
+
+        /// <summary>
+        /// lblCartCount control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCartCount;
+
+        /// <summary>
         /// phUserDropdown control.
         /// </summary>
         /// <remarks>
@@ -42,13 +60,13 @@ namespace PawfectSupplies.MasterPages
         protected global::System.Web.UI.WebControls.Literal litUsername;
 
         /// <summary>
-        /// phLoginLink control.
+        /// phAuthButtons control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.PlaceHolder phLoginLink;
+        protected global::System.Web.UI.WebControls.PlaceHolder phAuthButtons;
 
         /// <summary>
         /// MainContent control.

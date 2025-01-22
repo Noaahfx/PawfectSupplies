@@ -1,36 +1,59 @@
 ﻿using System;
-using System.Web.UI;
+using System.Data;
+using PawfectSupplies.DataAccess;
 
 namespace PawfectSupplies.MasterPages
 {
-    public partial class UserMaster : MasterPage
+    public partial class UserMaster : System.Web.UI.MasterPage
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            // Check if the user is logged in (session contains username)
             if (Session["Username"] != null)
             {
-                // User is logged in, show the user dropdown and display username
-                litUsername.Text = "Welcome, " + Session["Username"].ToString();
-                phUserDropdown.Visible = true; // Show the dropdown
-                phLoginLink.Visible = false;   // Hide the login link
+                phUserDropdown.Visible = true;
+                phAuthButtons.Visible = false;
+                phCart.Visible = true;
+
+                // Safely set the username
+                litUsername.Text = Session["Username"]?.ToString() ?? "User";
+
+                // Update the cart count
+                UpdateCartCount();
             }
             else
             {
-                // User is not logged in, show the login link
-                phUserDropdown.Visible = false;  // Hide the dropdown
-                phLoginLink.Visible = true;      // Show the login link
+                phUserDropdown.Visible = false;
+                phAuthButtons.Visible = true;
+                phCart.Visible = false;
             }
         }
 
-        protected void btnLogout_Click(object sender, EventArgs e)
+        public void UpdateCartCount()
         {
-            // Clear session on logout
-            Session.Clear();
-            Session.Abandon();
+            try
+            {
+                if (Session["UserID"] != null)
+                {
+                    int userId = Convert.ToInt32(Session["UserID"]);
+                    DataTable cartItems = new CartDAL().GetCartItems(userId);
 
-            // Redirect to login page
-            Response.Redirect("~/Pages/User/Login.aspx");
+                    int itemCount = 0;
+                    foreach (DataRow row in cartItems.Rows)
+                    {
+                        itemCount += Convert.ToInt32(row["Quantity"]);
+                    }
+
+                    lblCartCount.Text = itemCount.ToString();
+                }
+                else
+                {
+                    lblCartCount.Text = "0";
+                }
+            }
+            catch
+            {
+                lblCartCount.Text = "0"; // Fallback in case of any error
+            }
         }
     }
 }

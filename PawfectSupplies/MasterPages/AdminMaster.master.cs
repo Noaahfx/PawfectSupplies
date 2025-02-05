@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.UI;
-using System.Web.UI.WebControls;
+using PawfectSupplies.DataAccess;
 
 namespace PawfectSupplies.MasterPages
 {
@@ -11,7 +8,21 @@ namespace PawfectSupplies.MasterPages
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["Role"] == null || Session["Role"].ToString() != "Admin")
+            {
+                // Redirect non-admin users to login page
+                Response.Redirect("~/Login.aspx");
+            }
 
+            if (Session["Username"] != null)
+            {
+                phAdminDropdown.Visible = true;
+                litAdminUsername.Text = Session["Username"]?.ToString() ?? "Admin";
+            }
+            else
+            {
+                phAdminDropdown.Visible = false;
+            }
         }
     }
 }

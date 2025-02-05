@@ -24,6 +24,24 @@ namespace PawfectSupplies.MasterPages
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
 
         /// <summary>
+        /// phAdminDropdown control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phAdminDropdown;
+
+        /// <summary>
+        /// litAdminUsername control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Literal litAdminUsername;
+
+        /// <summary>
         /// MainContent control.
         /// </summary>
         /// <remarks>

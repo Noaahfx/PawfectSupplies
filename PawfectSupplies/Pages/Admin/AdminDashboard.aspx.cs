@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Data.SqlClient;
-using System.Configuration;
 
 namespace PawfectSupplies.Pages.Admin
 {
@@ -8,30 +6,9 @@ namespace PawfectSupplies.Pages.Admin
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!IsPostBack)
+            if (Session["Role"] == null || Session["Role"].ToString() != "Admin")
             {
-                LoadDashboardStats();
-            }
-        }
-
-        private void LoadDashboardStats()
-        {
-            string connectionString = ConfigurationManager.ConnectionStrings["PawfectSuppliesDB"].ConnectionString;
-            using (SqlConnection con = new SqlConnection(connectionString))
-            {
-                con.Open();
-
-                // Total Products
-                SqlCommand cmd = new SqlCommand("SELECT COUNT(*) FROM Products", con);
-                lblTotalProducts.Text = cmd.ExecuteScalar().ToString();
-
-                // Total Users
-                cmd.CommandText = "SELECT COUNT(*) FROM Users";
-                lblTotalUsers.Text = cmd.ExecuteScalar().ToString();
-
-                // Total Orders
-                cmd.CommandText = "SELECT COUNT(*) FROM Orders";
-                lblTotalOrders.Text = cmd.ExecuteScalar().ToString();
+                Response.Redirect("~/Pages/User/Login.aspx");
             }
         }
     }

@@ -13,32 +13,5 @@ namespace PawfectSupplies.Pages.Admin
 
     public partial class AdminDashboard
     {
-
-        /// <summary>
-        /// lblTotalProducts control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTotalProducts;
-
-        /// <summary>
-        /// lblTotalUsers control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTotalUsers;
-
-        /// <summary>
-        /// lblTotalOrders control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblTotalOrders;
     }
 }

@@ -4,65 +4,38 @@
 <head runat="server">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Pawfect Supplies</title>
+    <title>Pawfect Supplies - Admin</title>
     <!-- Google Font: DM Sans -->
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Tailwind CSS -->
     <link href="<%= ResolveUrl("~/Content/CSS/output.css") %>" rel="stylesheet">
-    <!-- Bootstrap -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <style>
-        body {
-            font-family: 'DM Sans', sans-serif;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        main {
-            flex: 1;
-        }
-        .navbar {
-            background-color: #1F2937; /* Dark Gray */
-        }
-        .navbar a.nav-link {
-            color: #D1D5DB; /* Light Gray */
-        }
-        .navbar a.nav-link:hover {
-            color: #38A89D; /* Teal */
-        }
-        footer {
-            background-color: #1F2937; /* Dark Gray */
-            color: #D1D5DB; /* Light Gray */
-            padding: 20px 0;
-            text-align: center;
-        }
-        footer a {
-            color: #FFD700; /* Gold */
-            text-decoration: none;
-        }
-        footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
 </head>
-<body>
+<body style="font-family: 'DM Sans', sans-serif; padding-top: 80px;">
     <form id="form1" runat="server" class="d-flex flex-column min-vh-100">
-        <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg">
-            <div class="container">
-                <a class="navbar-brand font-bold text-xl text-white" href="~/Pages/Admin/AdminDashboard.aspx">Admin Panel</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="adminNavbar">
-                    <ul class="navbar-nav">
-                        <li class="nav-item"><a class="nav-link" href="~/Pages/Admin/AdminDashboard.aspx">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="~/Pages/Admin/ManageProducts.aspx">Manage Products</a></li>
-                        <li class="nav-item"><a class="nav-link" href="~/Pages/Admin/Orders.aspx">Orders</a></li>
-                        <li class="nav-item"><a class="nav-link" href="~/Pages/User/Login.aspx">Logout</a></li>
-                    </ul>
-                </div>
+        <!-- Admin Navbar -->
+        <nav class="bg-teal-600 shadow-md fixed w-full z-50 flex items-center justify-between px-4" style="padding: 15px 20px; height: 80px; top: 0; left: 0;">
+            <!-- Logo -->
+            <a href="AdminDashboard.aspx" class="flex items-center">
+                <img src="<%= ResolveUrl("~/Content/Images/WebsiteLogo/Logo(White)(NoBG).png") %>" 
+                     alt="Pawfect Supplies Admin Logo" 
+                     class="h-12 w-auto object-contain" 
+                     style="max-height: 70px; transition: opacity 0.3s;">
+            </a>
+
+            <!-- Admin User Dropdown -->
+            <div class="relative">
+                <asp:PlaceHolder ID="phAdminDropdown" runat="server" Visible="false">
+                    <button id="adminDropdownButton" class="text-white font-bold px-4 py-2 focus:outline-none flex items-center">
+                        <asp:Literal ID="litAdminUsername" runat="server" />
+                        <span class="ml-2">&#x25BC;</span>
+                    </button>
+                    <div id="adminDropdownMenu" class="absolute right-0 bg-white text-gray-800 rounded-md shadow-lg mt-2 w-44 hidden">
+                        <a href="Logout.aspx" id="adminLogout" class="block px-4 py-2 hover:bg-gray-100 text-red-500">Logout</a>
+                    </div>
+                </asp:PlaceHolder>
             </div>
         </nav>
 
@@ -70,11 +43,9 @@
         <main class="container my-4">
             <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
         </main>
-
-        <!-- Footer -->
-        <footer>
-            <p>© 2025 Pawfect Supplies Admin Panel. All Rights Reserved.</p>
-        </footer>
     </form>
+
+    <!-- External JavaScript -->
+    <script src="<%= ResolveUrl("~/Scripts/AdminMaster.js") %>"></script>
 </body>
 </html>

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using PawfectSupplies.DataAccess;
+using Stripe.Checkout;
+using Stripe;
 
 namespace PawfectSupplies.Pages.User
 {
@@ -12,28 +15,49 @@ namespace PawfectSupplies.Pages.User
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["UserID"] == null)
+            {
+                Response.Redirect("~/Pages/User/Login.aspx");
+            }
+
             if (!IsPostBack)
             {
                 LoadCart();
             }
         }
 
+
         private void LoadCart()
         {
             int userId = Convert.ToInt32(Session["UserID"]);
             DataTable cartItems = cartDAL.GetCartItems(userId);
 
-            gvCart.DataSource = cartItems;
-            gvCart.DataBind();
-
-            decimal grandTotal = 0;
-            foreach (DataRow row in cartItems.Rows)
+            if (cartItems.Rows.Count > 0)
             {
-                grandTotal += Convert.ToDecimal(row["TotalPrice"]);
-            }
+                gvCart.DataSource = cartItems;
+                gvCart.DataBind();
 
-            lblGrandTotal.Text = grandTotal.ToString("C");
+                // ✅ Fix: Calculate total dynamically instead of using "TotalPrice" column
+                decimal grandTotal = 0;
+                foreach (DataRow row in cartItems.Rows)
+                {
+                    decimal price = Convert.ToDecimal(row["Price"]);
+                    int quantity = Convert.ToInt32(row["Quantity"]);
+                    grandTotal += (price * quantity);
+                }
+
+                lblGrandTotal.Text = grandTotal.ToString("C");
+
+                pnlCart.Visible = true;
+                pnlEmptyCart.Visible = false;
+            }
+            else
+            {
+                pnlCart.Visible = false;
+                pnlEmptyCart.Visible = true;
+            }
         }
+
 
         protected void gvCart_RowCommand(object sender, System.Web.UI.WebControls.GridViewCommandEventArgs e)
         {
@@ -85,5 +109,94 @@ namespace PawfectSupplies.Pages.User
                 cmd.ExecuteNonQuery();
             }
         }
+
+        protected void btnCheckout_Click(object sender, EventArgs e)
+        {
+            if (Session["UserID"] == null)
+            {
+                Response.Redirect("Login.aspx");
+                return;
+            }
+
+            int userId = Convert.ToInt32(Session["UserID"]);
+            string sessionUrl = CreateStripeCheckoutSession(userId);
+            if (!string.IsNullOrEmpty(sessionUrl))
+            {
+                Response.Redirect(sessionUrl);
+            }
+            else
+            {
+                lblGrandTotal.Text = "<span class='text-red-500'>❌ Failed to create checkout session. Please try again.</span>";
+            }
+        }
+
+        private string CreateStripeCheckoutSession(int userId)
+        {
+            StripeConfiguration.ApiKey = "sk_test_51QorNq07tJQwR1fO48dTYp6DYg3RbxnWwzMVJynXtGw4gUjwUzdO5zlAiGKkqG7Hmppn8jElMDZK0PddPhXbcVhy00rUQFvqms";
+
+            decimal totalAmount = GetTotalAmount(userId);
+            string successUrl = "https://localhost:44351/Pages/User/CheckoutSuccess.aspx";
+            string cancelUrl = "https://localhost:44351/Pages/User/ShoppingCart.aspx";
+
+            var options = new SessionCreateOptions
+            {
+                PaymentMethodTypes = new List<string> { "card" },
+                LineItems = new List<SessionLineItemOptions>
+        {
+            new SessionLineItemOptions
+            {
+                PriceData = new SessionLineItemPriceDataOptions
+                {
+                    Currency = "usd",
+                    UnitAmount = (long)(totalAmount * 100), // Convert to cents
+                    ProductData = new SessionLineItemPriceDataProductDataOptions
+                    {
+                        Name = "Pawfect Supplies Order"
+                    },
+                },
+                Quantity = 1,
+            },
+        },
+                Mode = "payment",
+                SuccessUrl = successUrl,
+                CancelUrl = cancelUrl,
+            };
+
+            var service = new SessionService();
+            Session session = service.Create(options);
+
+            return session.Url;  // ✅ Return the Stripe Checkout URL instead of session ID
+        }
+
+
+        private decimal GetTotalAmount(int userId)
+        {
+            decimal total = 0;
+            string connectionString = ConfigurationManager.ConnectionStrings["PawfectSuppliesDB"].ConnectionString;
+
+            using (SqlConnection con = new SqlConnection(connectionString))
+            {
+                // 🛠 FIX: Calculate total dynamically (Quantity * Price)
+                string query = @"
+                            SELECT SUM(c.Quantity * p.Price)
+                            FROM Cart c
+                            INNER JOIN Products p ON c.ProductID = p.ProductID
+                            WHERE c.UserID = @UserID";
+
+                using (SqlCommand cmd = new SqlCommand(query, con))
+                {
+                    cmd.Parameters.AddWithValue("@UserID", userId);
+                    con.Open();
+                    object result = cmd.ExecuteScalar();
+
+                    if (result != DBNull.Value)
+                    {
+                        total = Convert.ToDecimal(result);
+                    }
+                }
+            }
+            return total;
+        }
+
     }
 }

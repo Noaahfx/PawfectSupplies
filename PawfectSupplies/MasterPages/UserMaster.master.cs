@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Data;
+using System.Web.UI;
+using System.Web.UI.WebControls;
 using PawfectSupplies.DataAccess;
 
 namespace PawfectSupplies.MasterPages
@@ -54,6 +56,32 @@ namespace PawfectSupplies.MasterPages
             {
                 lblCartCount.Text = "0"; // Fallback in case of any error
             }
+        }
+
+        protected void btnSearch_Click(object sender, ImageClickEventArgs e)
+        {
+            string searchQuery = txtSearch.Text.Trim();
+
+            // Validation
+            if (string.IsNullOrEmpty(searchQuery))
+            {
+                searchErrorMessage.InnerText = "Please enter a product name to search.";
+                searchErrorMessage.Visible = true;
+                return;
+            }
+
+            if (searchQuery.Contains("'") || searchQuery.Contains("--"))
+            {
+                searchErrorMessage.InnerText = "Invalid search query. Please try again.";
+                searchErrorMessage.Visible = true;
+                return;
+            }
+
+            // Clear error message if valid
+            searchErrorMessage.Visible = false;
+
+            // Redirect with the correct parameter key
+            Response.Redirect($"SearchResults.aspx?query={Server.UrlEncode(searchQuery)}");
         }
     }
 }
